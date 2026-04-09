@@ -12,8 +12,6 @@ export class AuthService {
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    // console.log('register');
-    // console.log(createUserDto);
     return this.userRepository.insert({
       nombre:createUserDto.nombre,
       apellido_paterno:createUserDto.apellido_paterno,
