@@ -1,84 +1,155 @@
+# Auto Service Manager
 
-## Description
+API para la gestion de usuarios, vehiculos y servicios de mantenimiento de un auto.
+El proyecto esta construido con NestJS y actualmente se encuentra en desarrollo.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tecnologias implementadas
 
-## Project setup
+- **NestJS 11** como framework principal para la API REST.
+- **TypeScript 5.7** para el desarrollo tipado.
+- **Express** como adaptador HTTP de NestJS.
+- **PostgreSQL** como base de datos relacional.
+- **TypeORM** para entidades, repositorios y acceso a datos.
+- **@nestjs/config** para cargar la configuracion de la base de datos desde variables de entorno.
+- **Passport y JWT** para autenticacion mediante tokens Bearer.
+- **class-validator y class-transformer** para validar y transformar DTOs.
+- **Jest, ts-jest y Supertest** para pruebas unitarias y end-to-end.
+- **ESLint y Prettier** para linting y formato de codigo.
 
-```bash
-$ npm install
+## Arquitectura actual
+
+La aplicacion sigue una arquitectura modular por dominio. Cada modulo agrupa sus
+controladores, servicios, DTOs y entidades cuando aplica.
+
+```text
+src/
+├── main.ts                 # Punto de entrada y configuracion global
+├── app.module.ts           # Modulo raiz y composicion de la aplicacion
+├── config/
+│   └── database.config.ts  # Configuracion de PostgreSQL
+├── auth/                   # Registro, login, JWT y usuario autenticado
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   ├── jwt-auth.guard.ts
+│   ├── jwt.strategy.ts
+│   └── dto/
+├── users/                  # Operaciones CRUD de usuarios
+│   ├── users.controller.ts
+│   ├── users.service.ts
+│   ├── entities/
+│   └── dto/
+├── vehicles/               # Operaciones CRUD de vehiculos
+│   ├── vehicles.controller.ts
+│   ├── vehicles.service.ts
+│   ├── entities/
+│   └── dto/
+├── maintenance/            # Base inicial para mantenimientos
+│   ├── maintenance.controller.ts
+│   ├── maintenance.service.ts
+│   ├── entities/
+│   └── dto/
+└── expenses/               # Base inicial para gastos
+	 ├── expenses.controller.ts
+	 └── expenses.service.ts
 ```
 
-## Compile and run the project
+### Flujo de la aplicacion
 
-```bash
-# development
-$ npm run start
+1. `main.ts` crea la aplicacion NestJS, habilita CORS, agrega el prefijo global
+	`/api` y configura `ValidationPipe`.
+2. `AppModule` carga la configuracion y establece la conexion con PostgreSQL
+	mediante `TypeOrmModule`.
+3. Los controladores reciben las solicitudes HTTP y delegan la logica a los
+	servicios de cada dominio.
+4. Los servicios utilizan repositorios de TypeORM para consultar o modificar
+	las entidades de la base de datos.
+5. Las rutas protegidas utilizan `JwtAuthGuard`, que valida el token mediante
+	`JwtStrategy`.
 
-# watch mode
-$ npm run start:dev
+## Modulos y endpoints actuales
 
-# production mode
-$ npm run start:prod
+Todas las rutas usan el prefijo `/api`.
+
+### Auth
+
+- `POST /api/auth/register` - Registrar un usuario.
+- `POST /api/auth/login` - Iniciar sesion y obtener un token JWT.
+- `GET /api/auth/me` - Obtener el usuario autenticado. Requiere
+  `Authorization: Bearer <token>`.
+
+### Users
+
+- `GET /api/users` - Listar usuarios.
+- `GET /api/users/:id` - Obtener un usuario.
+- `POST /api/users` - Crear un usuario.
+- `PUT /api/users/:id` - Actualizar un usuario.
+- `DELETE /api/users/:id` - Eliminar un usuario.
+
+### Vehicles
+
+- `GET /api/vehicles` - Listar vehiculos.
+- `GET /api/vehicles/:id` - Obtener un vehiculo.
+- `POST /api/vehicles` - Crear un vehiculo.
+- `PUT /api/vehicles/:id` - Actualizar un vehiculo.
+- `DELETE /api/vehicles/:id` - Eliminar un vehiculo.
+
+### Maintenance y Expenses
+
+Estos modulos tienen una estructura inicial. `Maintenance` cuenta con el
+endpoint `GET /api/maintenance` en su controlador, mientras que `Expenses`
+aun no tiene endpoints implementados. Actualmente ambos modulos no estan
+importados en `AppModule`, por lo que deben registrarse alli antes de usarse
+desde la aplicacion.
+
+## Configuracion
+
+Crear un archivo `.env` con las variables usadas por la conexion a PostgreSQL:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=tu_password
+DB_NAME=auto_service_manager
+PORT=3000
 ```
 
-## Run tests
+## Instalacion y ejecucion
 
 ```bash
-# unit tests
-$ npm run test
+npm install
 
-# e2e tests
-$ npm run test:e2e
+# desarrollo
+npm run start:dev
 
-# test coverage
-$ npm run test:cov
+# compilacion
+npm run build
+
+# produccion
+npm run start:prod
 ```
-# AuthController → login/register
 
-# UsersController → usuarios
-
-# VehiclesController → autos
-
-# msintendceController 
-
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Pruebas
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# pruebas unitarias
+npm run test
+
+# modo interactivo
+npm run test:watch
+
+# pruebas end-to-end
+npm run test:e2e
+
+# cobertura
+npm run test:cov
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Consideraciones actuales
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- El secreto JWT esta definido directamente en el codigo y debe migrarse a
+  una variable de entorno antes de desplegar en produccion.
+- El flujo de autenticacion compara contrasenas en texto plano; debe utilizarse
+  un algoritmo de hash como bcrypt antes de manejar datos reales.
+- `synchronize` de TypeORM esta deshabilitado, por lo que las migraciones de
+  base de datos deben gestionarse de forma explicita.
