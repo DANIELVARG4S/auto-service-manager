@@ -13,7 +13,14 @@ export class VehiclesService {
   ) {}
 
   async findAll(): Promise<Vehicles[]> {
-    return this.vehiclesRepository.find();
+    return this.vehiclesRepository
+      .createQueryBuilder('vehiculo')
+      .innerJoinAndSelect('vehiculo.usuario', 'usuario')
+      .select([
+        'vehiculo',       // Trae todas las columnas del vehículo
+        'usuario.nombre', // Trae ÚNICAMENTE el nombre del usuario
+      ])
+      .getMany();
   }
 
   async findOne(id: number): Promise<Vehicles | null> {

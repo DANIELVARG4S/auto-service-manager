@@ -2,8 +2,13 @@ import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-
 
 export class UpdateVehicleDto {
 
+    // El id del vehiculo que se va a actualizar, es obligatorio para identificar el vehiculo
     @IsNotEmpty() 
-   @IsOptional()
+    @IsNumber()
+    id!: number;
+
+    @IsNotEmpty() 
+    @IsNumber()
     usuarioId!: number; 
 
     @IsString()
@@ -21,7 +26,6 @@ export class UpdateVehicleDto {
     @IsString()
     @IsNotEmpty()
     placa!: string;
-
 
     @IsNumber()  
     kilometraje!: number;

@@ -7,6 +7,7 @@ import databaseConfig from './config/database.config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
+import { MaintenanceModule } from './maintenance/maintenance.module';
 
 @Module({
   controllers: [AppController],
@@ -32,7 +33,8 @@ import { VehiclesModule } from './vehicles/vehicles.module';
     }),
     AuthModule,
     UsersModule,
-    VehiclesModule
+    VehiclesModule,
+    MaintenanceModule,
   ],
 })
 export class AppModule {}

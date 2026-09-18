@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { User } from 'src/users/entities/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('vehiculos')
 export class Vehicles {
@@ -27,5 +27,9 @@ export class Vehicles {
 
     @Column()
     color!: string;
-    
+
+    // Se omite el segundo argumento para que no dé error con user.id
+    @ManyToOne(() => User)
+    @JoinColumn({ name: 'usuario_id' })
+    usuario!: User;
 }
