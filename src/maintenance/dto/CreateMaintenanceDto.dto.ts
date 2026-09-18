@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, IsDateString, IsNumber } from 'class-validator';
 import { IsNull } from 'typeorm';
 
-export class MantenimientosDto {
+export class CreateMaintenanceDto {
 
     @IsString()
     @IsNotEmpty()
@@ -13,7 +13,7 @@ export class MantenimientosDto {
 
     @IsNumber()
     @IsNotEmpty()
-    tipo_mantenimiento_Id!: number;
+    tipo_Mantenimiento_Id!: number;
 
     @IsNotEmpty()
     @IsDateString()

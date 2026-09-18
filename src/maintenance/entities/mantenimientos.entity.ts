@@ -10,7 +10,7 @@ export class Mantenimiento {
   vehiculo_id!: number;
 
   @Column()
-  tipo_mantenimiento!: string;
+  tipo_mantenimiento_id!: number;
 
   @Column()
   fecha!: Date;
@@ -20,7 +20,7 @@ export class Mantenimiento {
 
 
   @Column()
-  description!: string;
+  descripcion!: string;
 
 
   @Column()
@@ -32,3 +32,5 @@ export class Mantenimiento {
   @Column()
   proximo_servicio_fecha!: Date;
 }
+
+// select id,vehiculo_id,tipo_mantenimiento_id,fecha,kilometraje,descripcion,costo,proximo_servicio_km,proximo_servicio_fecha from mantenimientos
