@@ -9,7 +9,7 @@ export class UpdateVehicleDto {
 
     @IsNotEmpty() 
     @IsNumber()
-    usuarioId!: number; 
+    usuario_id!: number; 
 
     @IsString()
     @IsNotEmpty()
