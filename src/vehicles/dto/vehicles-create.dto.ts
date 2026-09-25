@@ -4,13 +4,13 @@ export class CreateVehicleDto {
 
     @IsNotEmpty() 
     @IsNumber()
-    usuarioId!: number; 
+    usuario_id!: number; 
 
     @IsString()
     @IsNotEmpty()
     marca!: string;
     
-    @IsString()
+    @IsString() 
     @IsNotEmpty()
     modelo!: string;
 
